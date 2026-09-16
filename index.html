@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>末班電梯：00:47</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#050608;color:#eee;font-family:system-ui,-apple-system,sans-serif}
+#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;touch-action:none}
+#hud{position:fixed;inset:0;pointer-events:none}.top{position:absolute;left:14px;right:14px;top:12px;display:flex;justify-content:space-between;gap:8px}
+.card{background:#090b10d9;border:1px solid #ffffff20;border-radius:12px;padding:9px 12px;backdrop-filter:blur(8px)}
+#chapter{font-size:11px;color:#c5ae83}#objective{font-size:13px;margin-top:3px}
+#cross{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+#cross:before,#cross:after{content:"";position:absolute;background:#fff9}#cross:before{width:18px;height:1px;top:8px}#cross:after{width:1px;height:18px;left:8px}
+#prompt{position:absolute;left:50%;top:57%;transform:translateX(-50%);background:#08090ddd;border:1px solid #ffffff25;border-radius:10px;padding:8px 12px;font-size:13px;opacity:0;transition:.15s}
+#prompt.on{opacity:1}
+#inv{position:absolute;left:50%;bottom:15px;transform:translateX(-50%);display:flex;gap:6px;pointer-events:auto}
+.slot{min-width:55px;height:48px;border:1px solid #ffffff25;background:#0a0c10df;color:#ddd;border-radius:10px;font-size:10px}.slot.sel{border-color:#d8b676}
+#buttons{position:absolute;right:12px;bottom:15px;display:flex;gap:6px;pointer-events:auto}.ui{height:44px;border:1px solid #ffffff28;background:#0a0c10df;color:#eee;border-radius:11px;padding:0 12px}
+#joystick{position:absolute;left:20px;bottom:22px;width:112px;height:112px;border-radius:50%;border:1px solid #ffffff20;background:#ffffff08;pointer-events:auto;touch-action:none}
+#stick{position:absolute;left:34px;top:34px;width:44px;height:44px;border-radius:50%;background:#ffffff20}
+#interact{position:absolute;right:24px;bottom:78px;width:72px;height:72px;border-radius:50%;pointer-events:auto;border:1px solid #ffffff30;background:#11141bdd;color:#eee;font-weight:700}
+#overlay,#dialog,#ending{position:fixed;inset:0;background:radial-gradient(circle at 50% 38%,#1b1e24,#050608 72%);z-index:20;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box}
+.panel{width:min(560px,92vw);max-height:82vh;overflow:auto;background:#0b0d11ee;border:1px solid #ffffff20;border-radius:18px;padding:22px;box-sizing:border-box}
+h1{font-size:31px;margin:.35em 0}.muted{color:#a8adb6;line-height:1.75;font-size:14px}.eyebrow{font-size:11px;letter-spacing:.28em;color:#b9a57f}
+.primary,.choice{min-height:48px;border:1px solid #907a54;background:#2a241b;color:#fff;border-radius:12px;padding:0 18px;margin-top:10px}.choice{width:100%;text-align:left;background:#17191f}
+.note{background:#d7c9a9;color:#27231d;padding:14px;border-radius:8px;line-height:1.65;margin:10px 0}
+#dialog,#ending{display:none;background:#000b;z-index:30}#ending{z-index:40}
+#rotate{display:none;position:fixed;inset:0;z-index:100;background:#050608;align-items:center;justify-content:center;text-align:center;padding:30px}
+@media(max-width:700px) and (orientation:portrait){#rotate{display:flex}}@media(min-width:900px){#joystick{display:none}}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<div id="hud">
+ <div class="top"><div class="card"><div id="chapter">序章</div><div id="objective">離開百貨公司</div></div><div class="card">00:47 · 訊號：無</div></div>
+ <div id="cross"></div><div id="prompt">調查</div>
+ <div id="joystick"><div id="stick"></div></div><button id="interact">調查</button>
+ <div id="inv"></div><div id="buttons"><button class="ui" id="hint">提示</button><button class="ui" id="sound">🔊</button><button class="ui" id="full">⛶</button></div>
+</div>
+<div id="overlay"><div class="panel"><div class="eyebrow">00:47 AM · 南城百貨</div><h1>末班電梯</h1><p class="muted">夜班結束後，妳搭上最後一班員工電梯。門再次打開時，外面仍是百貨公司——卻沒有任何人。手機裡突然多出一段「明天 00:47」拍攝的影片。</p><div class="note">影片中的妳哭著說：「如果妳又回到這裡……不要相信警衛。」</div><p class="muted">手機請橫向。左側移動，右側拖曳視角，中央準星對準物件後按「調查」。</p><button id="start" class="primary">進入百貨公司</button></div></div>
+<div id="dialog"><div class="panel"><h2 id="dt"></h2><div id="db" class="muted"></div><div id="dc"></div><button id="close" class="choice">返回</button></div></div>
+<div id="ending"><div class="panel"><div class="eyebrow">ENDING</div><h1 id="et"></h1><div id="eb" class="muted"></div><button id="restart" class="primary">重新開始</button></div></div>
+<div id="rotate"><div><h2>↻ 請將手機橫向</h2><p>《末班電梯》以橫向第一人稱遊玩。</p></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+<script>
+(()=>{"use strict";
+const $=s=>document.querySelector(s);
+const G={scene:null,camera:null,renderer:null,ray:null,clock:null,room:"elevator",yaw:0,pitch:0,moveX:0,moveY:0,drag:false,lastX:0,lastY:0,selected:null,sound:true,audio:null,hum:null,objects:[],items:new Set(),flags:{doll:false,receipt:false,mirror:false,guard:false,b3:false,truth:0}};
+const names={key:"小鑰匙",receipt:"燒焦收據",lens:"鏡片",badge:"警衛證",cassette:"錄音帶"};
+function audio(){if(!G.audio){G.audio=new(window.AudioContext||window.webkitAudioContext)();let o=G.audio.createOscillator(),g=G.audio.createGain();o.frequency.value=48;g.gain.value=.018;o.connect(g).connect(G.audio.destination);o.start();G.hum=g}G.audio.resume?.()}
+function beep(f=440,d=.08){if(!G.sound)return;audio();let o=G.audio.createOscillator(),g=G.audio.createGain();o.frequency.value=f;g.gain.value=.03;o.connect(g).connect(G.audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,G.audio.currentTime+d);o.stop(G.audio.currentTime+d)}
+function dialog(t,b,c=[]){$("#dt").textContent=t;$("#db").innerHTML=b;$("#dc").innerHTML="";c.forEach(x=>{let q=document.createElement("button");q.className="choice";q.textContent=x[0];q.onclick=x[1];$("#dc").appendChild(q)});$("#dialog").style.display="flex"}
+$("#close").onclick=()=>$("#dialog").style.display="none";
+function say(t){$("#prompt").textContent=t;$("#prompt").classList.add("on");setTimeout(()=>$("#prompt").classList.remove("on"),1200)}
+function item(k){G.items.add(k);renderInv();beep(700);say("取得："+names[k])}
+function renderInv(){let e=$("#inv");e.innerHTML="";G.items.forEach(k=>{let b=document.createElement("button");b.className="slot"+(G.selected===k?" sel":"");b.textContent=names[k];b.onclick=()=>{G.selected=G.selected===k?null:k;renderInv()};e.appendChild(b)})}
+function mat(c){return new THREE.MeshStandardMaterial({color:c,roughness:.8})}
+function box(n,x,y,z,w,h,d,c,a){let m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c));m.position.set(x,y,z);m.name=n;m.userData.action=a;G.scene.add(m);if(a)G.objects.push(m);return m}
+function clear(){while(G.scene.children.length)G.scene.remove(G.scene.children[0]);G.objects=[]}
+function shell(w=18,d=20,c=0x25262a){box("floor",0,-1,0,w,.3,d,0x17181b);box("ceil",0,5.5,0,w,.25,d,0x16171a);box("l",-w/2,2.2,0,.3,6.5,d,c);box("r",w/2,2.2,0,.3,6.5,d,c);box("b",0,2.2,-d/2,w,6.5,.3,c);box("f",0,2.2,d/2,w,6.5,.3,c);G.scene.add(new THREE.AmbientLight(0x888899,1));let l=new THREE.PointLight(0xffdda0,30,20);l.position.set(0,4,1);G.scene.add(l)}
+function obj(c,o){$("#chapter").textContent=c;$("#objective").textContent=o}
+function room(r){G.room=r;clear();G.camera.position.set(0,1.7,5);G.yaw=G.pitch=0;
+ if(r==="elevator"){shell(8,8,0x3a3b3e);box("樓層按鈕",2.7,1.7,-2.8,1.1,2.8,.25,0x15171b,"panel");box("電梯門",0,1.5,-3.8,3.6,5,.2,0x55565a,"panel");obj("序章","調查異常的樓層按鈕")}
+ if(r==="six"){shell(22,28,0x232126);box("人偶",3,1.1,-7,.7,2,.7,0x6f565c,"doll");box("玩具箱",-5,.3,-8,3,1.2,2,0x5a4037,"toybox");box("電梯",0,1.5,13.8,4,5,.2,0x44454a,"return");obj("第一章 · 6F","調查兒童樓層")}
+ if(r==="four"){shell(26,30,0x2a2723);box("收銀機",8,1,-10,2,2,1.2,0x26282b,"register");box("燒焦餐桌",-7,.45,-9,3,.3,2,0x211915,"burn");box("電梯",0,1.5,14.8,4,5,.2,0x44454a,"return");obj("第二章 · 4F","還原最後一桌客人")}
+ if(r==="two"){shell(24,28,0x26262b);box("鏡子",7,1.6,-9,.25,4,4,0x78909a,"mirror");box("試衣間",-7,1.6,-10,4,5,.25,0x3a3035,"fitting");box("電梯",0,1.5,13.8,4,5,.2,0x44454a,"return");obj("第三章 · 2F","調查鏡中的人")}
+ if(r==="b1"){shell(22,26,0x202326);box("警衛崗亭",5,1,-7,5,3,3,0x34383b,"guard");box("置物櫃",-6,1,-8,3,4,1,0x303338,"locker");box("電梯",0,1.5,12.8,4,5,.2,0x44454a,"return");obj("第四章 · B1","找到前往B3的方法")}
+ if(r==="b3"){shell(20,30,0x17191c);box("錄音機",-5,.8,-8,2,1.5,1.5,0x292b2f,"recorder");box("事故檔案",0,1,-13,5,3,1,0x343136,"archive");box("電梯",0,1.5,14.8,4,5,.2,0x44454a,"return");obj("第五章 · B3","找出00:47的真相")}
+}
+function menu(){let c=[["6F 兒童生活",()=>go("six")],["4F 美食街",()=>go("four")],["2F 女裝",()=>go("two")],["B1 停車場",()=>go("b1")]];if(G.flags.guard||G.flags.truth>=2)c.push(["B3 未登錄樓層",()=>go("b3")]);dialog("電梯樓層","只剩幾個按鈕還有反應。",c)}
+function go(r){$("#dialog").style.display="none";beep(180,.25);setTimeout(()=>room(r),180)}
+function act(a){
+ if(a==="panel")return menu(); if(a==="return")return room("elevator");
+ if(a==="doll"){if(!G.flags.doll){G.flags.doll=true;G.flags.truth++;item("key");dialog("櫥窗人偶","人偶鞋底寫著：<div class='note'>不要看樓層，要聽抵達音。</div>妳在它手裡找到一把小鑰匙。")}else dialog("人偶","它似乎比剛才更靠近妳。");return}
+ if(a==="toybox"){dialog("玩具箱",G.items.has("key")?"夾層裡是一張三年前的員工合照。<div class='note'>事故時間：00:47</div>":"需要一把小鑰匙。");return}
+ if(a==="burn"){if(!G.flags.receipt){G.flags.receipt=true;item("receipt");dialog("燒焦餐桌","<div class='note'>23:58 員工餐 ×3<br>00:41 緊急廣播<br>00:47 VOID</div>")}else dialog("燒焦餐桌","桌上留下三個杯印。");return}
+ if(a==="register"){dialog("收銀機",G.items.has("receipt")?"交易備註：<div class='note'>第三份餐給小晴。她要去B3關總電源。</div>":"需要最後一筆交易的收據。");return}
+ if(a==="mirror"){if(!G.flags.mirror){G.flags.mirror=true;G.flags.truth++;item("lens");dialog("試衣鏡","鏡中的妳慢了半秒。身後多出一名穿制服的女孩。")}else dialog("試衣鏡","鏡面缺了一角。");return}
+ if(a==="fitting"){dialog("試衣間",G.items.has("lens")?"鏡片映出反字：<div class='note'>不是警衛把門鎖上。是我。——妳</div>":"牆上有一串反字。");return}
+ if(a==="guard"){if(!G.flags.guard){G.flags.guard=true;item("badge");dialog("夜班警衛","「三年前火警那晚，小晴被困在B3。妳關了防火門。」<br><br>他把警衛證交給妳。")}else dialog("夜班警衛","「去B3。這次別再逃。」");return}
+ if(a==="locker"){if(G.items.has("badge")){if(!G.items.has("cassette"))item("cassette");dialog("置物櫃","找到標記 <strong>00:47 / CONTROL ROOM</strong> 的錄音帶。")}else dialog("置物櫃","需要警衛證。");return}
+ if(a==="recorder"){if(G.items.has("cassette")){G.flags.b3=true;dialog("00:47 錄音","小晴：「煙進來了！開門！」<br>警衛：「防火門卡住了！」<div class='note'>妳：「不要開。火會燒到整棟樓。」</div>")}else dialog("錄音機","卡槽是空的。");return}
+ if(a==="archive"){if(!G.flags.b3)return dialog("事故檔案","需要先找到00:47的錄音。");dialog("事故檔案：真相","三年前B3起火。為阻止火勢蔓延，妳在00:47手動鎖死防火門，小晴沒能逃出來。這座百貨公司是妳反覆重演的記憶。",[["記住全部",()=>end("TRUE END · 00:48","時鐘終於從00:47跳到00:48。妳沒有改變過去，但停止逃避它。")],["再次離開",()=>end("LOOP END · 00:47","電梯門關上。手機裡再次出現那段來自明天的影片。")]])}
+}
+function end(t,b){$("#dialog").style.display="none";$("#et").textContent=t;$("#eb").innerHTML=b;$("#ending").style.display="flex"}
+function interact(){G.ray.setFromCamera(new THREE.Vector2(),G.camera);let h=G.ray.intersectObjects(G.objects);if(h.length&&h[0].distance<7)act(h[0].object.userData.action);else say("這裡沒有可調查的東西")}
+function init(){
+ G.scene=new THREE.Scene();G.scene.background=new THREE.Color(0x07080a);G.scene.fog=new THREE.FogExp2(0x07080a,.035);
+ G.camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,100);
+ G.renderer=new THREE.WebGLRenderer({antialias:true});G.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));G.renderer.setSize(innerWidth,innerHeight);$("#game").appendChild(G.renderer.domElement);
+ G.ray=new THREE.Raycaster();G.clock=new THREE.Clock();room("elevator");
+ let c=G.renderer.domElement;
+ c.onpointerdown=e=>{if(e.clientX>innerWidth*.35){G.drag=true;G.lastX=e.clientX;G.lastY=e.clientY}};
+ c.onpointermove=e=>{if(G.drag){G.yaw-=(e.clientX-G.lastX)*.004;G.pitch=Math.max(-1,Math.min(1,G.pitch-(e.clientY-G.lastY)*.003));G.lastX=e.clientX;G.lastY=e.clientY}};
+ c.onpointerup=()=>G.drag=false;c.onpointercancel=()=>G.drag=false;
+ let joy=$("#joystick"),stick=$("#stick"),jid=null;
+ function jm(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,m=Math.hypot(x,y)||1,s=Math.min(34,m)/m,nx=x*s,ny=y*s;stick.style.transform=`translate(${nx}px,${ny}px)`;G.moveX=nx/34;G.moveY=-ny/34}
+ joy.onpointerdown=e=>{jid=e.pointerId;joy.setPointerCapture(jid);jm(e)};joy.onpointermove=e=>{if(e.pointerId===jid)jm(e)};joy.onpointerup=joy.onpointercancel=()=>{jid=null;G.moveX=G.moveY=0;stick.style.transform=""};
+ addEventListener("resize",()=>{G.camera.aspect=innerWidth/innerHeight;G.camera.updateProjectionMatrix();G.renderer.setSize(innerWidth,innerHeight)});
+ function loop(){requestAnimationFrame(loop);let dt=Math.min(.04,G.clock.getDelta()),f=G.moveY,s=G.moveX;G.camera.position.x=Math.max(-8,Math.min(8,G.camera.position.x+(Math.sin(G.yaw)*f+Math.cos(G.yaw)*s)*3*dt));G.camera.position.z=Math.max(-12,Math.min(12,G.camera.position.z+(-Math.cos(G.yaw)*f+Math.sin(G.yaw)*s)*3*dt));G.camera.rotation.order="YXZ";G.camera.rotation.y=G.yaw;G.camera.rotation.x=G.pitch;G.ray.setFromCamera(new THREE.Vector2(),G.camera);let h=G.ray.intersectObjects(G.objects);let near=h.length&&h[0].distance<7;$("#prompt").classList.toggle("on",!!near);if(near)$("#prompt").textContent="調查 · "+h[0].object.name;G.renderer.render(G.scene,G.camera)}loop()
+}
+$("#start").onclick=()=>{if(typeof THREE==="undefined")return alert("3D引擎載入失敗，請確認網路後重新整理。");audio();$("#overlay").style.display="none";init()};
+$("#interact").onclick=interact;
+$("#hint").onclick=()=>dialog("提示",{elevator:"調查電梯按鈕。",six:"先調查人偶，再看玩具箱。",four:"燒焦餐桌與收銀機有關。",two:"鏡子與反字是同一組線索。",b1:"和警衛談話後檢查置物櫃。",b3:"先播放00:47錄音，再查事故檔案。"}[G.room]);
+$("#sound").onclick=()=>{G.sound=!G.sound;$("#sound").textContent=G.sound?"🔊":"🔇";if(G.hum)G.hum.gain.value=G.sound?.018:0};
+$("#full").onclick=()=>document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.();
+$("#restart").onclick=()=>location.reload();
+})();
+</script>
+</body></html>
