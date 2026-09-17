@@ -3,123 +3,142 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>末班電梯：00:47</title>
+<title>末班電梯：00:47 — 重製版</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b0f;color:#eee;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}
-#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;touch-action:none}
-#hud{position:fixed;inset:0;pointer-events:none}.top{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between;gap:8px}
-.card{background:#090b10d9;border:1px solid #ffffff30;border-radius:12px;padding:8px 11px;backdrop-filter:blur(8px);box-shadow:0 4px 20px #0008}
-#chapter{font-size:11px;color:#e2c995}#objective{font-size:13px;margin-top:2px}
-#cross{position:absolute;left:50%;top:50%;width:20px;height:20px;transform:translate(-50%,-50%)}
-#cross:before,#cross:after{content:"";position:absolute;background:#fff}.target:before,.target:after{background:#ffd37a!important;box-shadow:0 0 8px #ffc75a}
-#cross:before{width:20px;height:2px;top:9px}#cross:after{width:2px;height:20px;left:9px}
-#prompt{position:absolute;left:50%;top:57%;transform:translateX(-50%);background:#08090dee;border:1px solid #ffffff35;border-radius:10px;padding:8px 12px;font-size:13px;opacity:0;transition:.12s;white-space:nowrap}.on{opacity:1!important}
-#inv{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:5px;pointer-events:auto}
-.slot{min-width:58px;height:46px;border:1px solid #ffffff30;background:#0a0c10e8;color:#ddd;border-radius:10px;font-size:10px}.slot.sel{border-color:#e2bc70;color:#ffe3aa}
-#buttons{position:absolute;right:10px;bottom:12px;display:flex;gap:5px;pointer-events:auto}.ui{height:42px;border:1px solid #ffffff35;background:#0a0c10e8;color:#eee;border-radius:11px;padding:0 11px}
-#joystick{position:absolute;left:18px;bottom:18px;width:108px;height:108px;border-radius:50%;border:1px solid #ffffff30;background:#ffffff0d;pointer-events:auto;touch-action:none}
-#stick{position:absolute;left:33px;top:33px;width:42px;height:42px;border-radius:50%;background:#ffffff32}
-#interact{position:absolute;right:22px;bottom:68px;width:72px;height:72px;border-radius:50%;pointer-events:auto;border:1px solid #ffffff45;background:#171b24e8;color:#fff;font-weight:700}
-#overlay,#dialog,#ending{position:fixed;inset:0;background:radial-gradient(circle at 50% 35%,#242832,#07080b 74%);z-index:20;display:flex;align-items:center;justify-content:center;padding:20px}
-.panel{width:min(570px,94vw);max-height:86vh;overflow:auto;background:#0b0d12f2;border:1px solid #ffffff28;border-radius:18px;padding:20px;box-shadow:0 15px 50px #000}
-h1{font-size:30px;margin:.3em 0}.muted{color:#bcc1ca;line-height:1.7;font-size:14px}.eyebrow{font-size:11px;letter-spacing:.24em;color:#cbb485}
-.primary,.choice{min-height:46px;border:1px solid #9d8358;background:#30271b;color:#fff;border-radius:12px;padding:0 16px;margin-top:9px}.choice{width:100%;text-align:left;background:#191c23}
-.note{background:#d9cba9;color:#28231b;padding:13px;border-radius:8px;line-height:1.6;margin:10px 0}
-#dialog,#ending{display:none;background:#000b;z-index:30}#ending{z-index:40}
-#rotate{display:none;position:fixed;inset:0;z-index:100;background:#07080b;align-items:center;justify-content:center;text-align:center;padding:30px}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#07090c;color:#eee;font-family:system-ui,-apple-system,"Noto Sans TC",sans-serif}
+canvas{display:block;width:100%;height:100%;touch-action:none}#game{position:fixed;inset:0}
+#hud{position:fixed;inset:0;pointer-events:none}.top{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between}
+.card{background:#080a0edc;border:1px solid #ffffff2d;border-radius:11px;padding:8px 11px;backdrop-filter:blur(7px);box-shadow:0 5px 22px #0009}
+#chapter{font-size:11px;color:#d6bd89}#objective{font-size:13px;margin-top:2px}
+#cross{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+#cross:before,#cross:after{content:"";position:absolute;background:#fff9}#cross:before{width:18px;height:1px;top:8px}#cross:after{width:1px;height:18px;left:8px}
+#cross.hot:before,#cross.hot:after{background:#ffd27a;box-shadow:0 0 7px #ffcb64}
+#prompt{position:absolute;left:50%;top:57%;transform:translateX(-50%);padding:7px 11px;background:#080a0ee8;border:1px solid #ffffff32;border-radius:9px;font-size:12px;opacity:0;white-space:nowrap}
+#prompt.on{opacity:1}
+#joy{position:absolute;left:20px;bottom:20px;width:112px;height:112px;border-radius:50%;border:1px solid #ffffff2b;background:#ffffff0b;pointer-events:auto;touch-action:none}
+#stick{position:absolute;left:35px;top:35px;width:42px;height:42px;border-radius:50%;background:#ffffff32;box-shadow:0 0 18px #0008}
+#act{position:absolute;right:22px;bottom:76px;width:74px;height:74px;border-radius:50%;pointer-events:auto;border:1px solid #ffffff42;background:#171b22e8;color:white;font-weight:700}
+#tools{position:absolute;right:12px;bottom:16px;display:flex;gap:6px;pointer-events:auto}.ui{height:42px;border:1px solid #ffffff2c;background:#0b0d12e8;color:#eee;border-radius:10px;padding:0 11px}
+#overlay,#dialog,#ending{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 35%,#20252c,#06080b 72%)}
+.panel{width:min(580px,94vw);max-height:86vh;overflow:auto;padding:21px;background:#0b0e13f4;border:1px solid #ffffff25;border-radius:17px;box-shadow:0 20px 70px #000}
+h1{font-size:30px;margin:.3em 0}.muted{font-size:14px;line-height:1.72;color:#bec3cb}.eyebrow{font-size:11px;letter-spacing:.25em;color:#c9af7c}.note{padding:13px;margin:10px 0;border-radius:8px;background:#d7c8a7;color:#29241c;line-height:1.6}
+.primary,.choice{min-height:46px;border:1px solid #92794f;border-radius:11px;color:#fff;background:#302719;padding:0 16px;margin-top:9px}.choice{display:block;width:100%;text-align:left;background:#191c22}
+#dialog,#ending{display:none;background:#000c;z-index:30}#ending{z-index:40}
+#rotate{display:none;position:fixed;inset:0;z-index:100;background:#07090c;align-items:center;justify-content:center;text-align:center}
 @media(max-width:700px) and (orientation:portrait){#rotate{display:flex}}
-@media(min-width:900px){#joystick{display:none}}
+@media(min-width:900px){#joy{display:none}}
 </style>
 </head>
 <body>
 <div id="game"></div>
 <div id="hud">
- <div class="top"><div class="card"><div id="chapter">序章</div><div id="objective">調查異常的樓層按鈕</div></div><div class="card">00:47 · 訊號：無</div></div>
- <div id="cross"></div><div id="prompt">調查</div>
- <div id="joystick"><div id="stick"></div></div><button id="interact">調查</button>
- <div id="inv"></div><div id="buttons"><button class="ui" id="hint">提示</button><button class="ui" id="sound">🔊</button><button class="ui" id="full">⛶</button></div>
+<div class="top"><div class="card"><div id="chapter">序章</div><div id="objective">調查樓層面板</div></div><div class="card">00:47 · 訊號：無</div></div>
+<div id="cross"></div><div id="prompt">調查</div>
+<div id="joy"><div id="stick"></div></div><button id="act">調查</button>
+<div id="tools"><button class="ui" id="hint">提示</button><button class="ui" id="sound">🔊</button><button class="ui" id="full">⛶</button></div>
 </div>
-<div id="overlay"><div class="panel"><div class="eyebrow">00:47 AM · 南城百貨</div><h1>末班電梯</h1><p class="muted">夜班結束後，妳搭上最後一班員工電梯。門再次打開時，外面仍是百貨公司——卻沒有任何人。手機裡突然多出一段「明天 00:47」拍攝的影片。</p><div class="note">影片中的妳哭著說：「如果妳又回到這裡……不要相信警衛。」</div><p class="muted">手機請橫向。左側移動，右側拖曳視角。準星變黃時按「調查」。</p><button id="start" class="primary">進入百貨公司</button></div></div>
-<div id="dialog"><div class="panel"><h2 id="dt"></h2><div id="db" class="muted"></div><div id="dc"></div><button id="close" class="choice">返回</button></div></div>
-<div id="ending"><div class="panel"><div class="eyebrow">ENDING</div><h1 id="et"></h1><div id="eb" class="muted"></div><button id="restart" class="primary">重新開始</button></div></div>
-<div id="rotate"><div><h2>↻ 請將手機橫向</h2><p>《末班電梯》以橫向第一人稱遊玩。</p></div></div>
-
+<div id="overlay"><div class="panel"><div class="eyebrow">00:47 AM · 南城百貨</div><h1>末班電梯</h1><p class="muted">夜班結束後，妳搭上最後一班員工電梯。門再次打開時，整棟百貨只剩緊急照明。</p><div class="note">手機裡多出一段「明天 00:47」的影片。影片中的妳說：「如果妳又回到這裡……不要相信警衛。」</div><p class="muted">左側搖桿移動；右半邊拖曳視角。準星變黃時按「調查」。</p><button class="primary" id="start">進入百貨公司</button></div></div>
+<div id="dialog"><div class="panel"><h2 id="dt"></h2><div id="db" class="muted"></div><div id="choices"></div><button class="choice" id="close">返回</button></div></div>
+<div id="ending"><div class="panel"><div class="eyebrow">ENDING</div><h1 id="et"></h1><div id="eb" class="muted"></div><button class="primary" onclick="location.reload()">重新開始</button></div></div>
+<div id="rotate"><div><h2>↻ 請將手機橫向</h2><p>橫向模式才能正常操作。</p></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
 <script>
 (()=>{"use strict";
 const $=s=>document.querySelector(s);
-const G={scene:null,camera:null,renderer:null,ray:null,clock:null,room:"elevator",yaw:0,pitch:0,moveX:0,moveY:0,drag:false,lastX:0,lastY:0,sound:true,audio:null,hum:null,objects:[],items:new Set(),bounds:{x:3.3,z:3.3},flags:{doll:false,toy:false,receipt:false,register:false,mirror:false,fitting:false,guard:false,cassette:false,recording:false}};
-const names={key:"小鑰匙",receipt:"燒焦收據",lens:"鏡片",badge:"警衛證",cassette:"錄音帶"};
-function audio(){if(!G.audio){G.audio=new(window.AudioContext||window.webkitAudioContext)();let o=G.audio.createOscillator(),g=G.audio.createGain();o.frequency.value=48;g.gain.value=.012;o.connect(g).connect(G.audio.destination);o.start();G.hum=g}G.audio.resume?.()}
-function beep(f=440,d=.08){if(!G.sound)return;audio();let o=G.audio.createOscillator(),g=G.audio.createGain();o.frequency.value=f;g.gain.value=.025;o.connect(g).connect(G.audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,G.audio.currentTime+d);o.stop(G.audio.currentTime+d)}
-function dialog(t,b,c=[]){$("#dt").textContent=t;$("#db").innerHTML=b;$("#dc").innerHTML="";c.forEach(x=>{let q=document.createElement("button");q.className="choice";q.textContent=x[0];q.onclick=x[1];$("#dc").appendChild(q)});$("#dialog").style.display="flex"}
-$("#close").onclick=()=>$("#dialog").style.display="none";
-function say(t){$("#prompt").textContent=t;$("#prompt").classList.add("on");setTimeout(()=>$("#prompt").classList.remove("on"),1100)}
-function item(k){if(G.items.has(k))return;G.items.add(k);renderInv();beep(700);say("取得："+names[k])}
-function renderInv(){let e=$("#inv");e.innerHTML="";G.items.forEach(k=>{let b=document.createElement("button");b.className="slot";b.textContent=names[k];e.appendChild(b)})}
-function mat(c,em=0){return new THREE.MeshStandardMaterial({color:c,roughness:.72,metalness:.08,emissive:em,emissiveIntensity:em?0.3:0})}
-function box(n,x,y,z,w,h,d,c,a,em=0){let m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat(c,em));m.position.set(x,y,z);m.name=n;m.userData.action=a;G.scene.add(m);if(a)G.objects.push(m);return m}
-function clear(){while(G.scene.children.length)G.scene.remove(G.scene.children[0]);G.objects=[]}
-function shell(w,d,c=0x35383d){
- G.bounds={x:w/2-.7,z:d/2-.7};
- box("地板",0,-1,0,w,.3,d,0x2a2c31);box("天花板",0,5.5,0,w,.25,d,0x24262a);
- box("左牆",-w/2,2.2,0,.3,6.5,d,c);box("右牆",w/2,2.2,0,.3,6.5,d,c);box("後牆",0,2.2,-d/2,w,6.5,.3,c);box("前牆",0,2.2,d/2,w,6.5,.3,c);
- G.scene.add(new THREE.HemisphereLight(0xc9d7ff,0x44372c,2.25));
- let key=new THREE.PointLight(0xffd7a0,85,24,1.7);key.position.set(0,4.4,2);G.scene.add(key);
- let fill=new THREE.PointLight(0xa9c7ff,45,20,1.8);fill.position.set(-4,2.8,-4);G.scene.add(fill);
+const S={scene:null,cam:null,ren:null,ray:null,clock:null,room:"elevator",yaw:0,pitch:0,input:new THREE.Vector2(),vel:new THREE.Vector2(),drag:false,lastX:0,lastY:0,objects:[],colliders:[],bounds:{x:3,z:3},sound:true,audio:null,hum:null,items:new Set(),flags:{doll:0,receipt:0,mirror:0,guard:0,tape:0,record:0}};
+const C={wall:0x55545a,floor:0x27282b,metal:0x6a6d70,dark:0x1b1d20,wood:0x60483a,red:0x75464c,cream:0xb5aa96,glass:0x8faab3};
+function M(c,rough=.72,metal=.05){return new THREE.MeshStandardMaterial({color:c,roughness:rough,metalness:metal})}
+function mesh(g,m,x=0,y=0,z=0){let o=new THREE.Mesh(g,m);o.position.set(x,y,z);S.scene.add(o);return o}
+function cube(x,y,z,w,h,d,c=C.dark,rough=.72,metal=.05){return mesh(new THREE.BoxGeometry(w,h,d),M(c,rough,metal),x,y,z)}
+function cyl(x,y,z,r,h,c=C.metal){return mesh(new THREE.CylinderGeometry(r,r,h,18),M(c,.55,.2),x,y,z)}
+function group(name,action){let g=new THREE.Group();g.name=name;g.userData.action=action;S.scene.add(g);if(action)S.objects.push(g);return g}
+function part(g,geo,mat,x,y,z,rx=0,ry=0,rz=0){let m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.set(rx,ry,rz);g.add(m);return m}
+function interactive(g){g.traverse(o=>{if(o.isMesh){o.userData.root=g}})}
+function collider(x,z,w,d){S.colliders.push({x,z,w,d})}
+function clear(){while(S.scene.children.length)S.scene.remove(S.scene.children[0]);S.objects=[];S.colliders=[]}
+function shell(w,d,wall=C.wall){
+ S.bounds={x:w/2-.65,z:d/2-.65};
+ cube(0,-.18,0,w,.35,d,C.floor,.9); cube(0,4.8,0,w,.25,d,0x303136);
+ cube(-w/2,2.3,0,.25,5,d,wall);cube(w/2,2.3,0,.25,5,d,wall);cube(0,2.3,-d/2,w,5,.25,wall);cube(0,2.3,d/2,w,5,.25,wall);
+ for(let z=-d/2+2;z<d/2;z+=5){let l=new THREE.PointLight(0xffdfae,35,8,2);l.position.set(0,4.35,z);S.scene.add(l);let fixture=cube(0,4.5,z,2,.08,.35,0xe6d7b5);fixture.material.emissive=new THREE.Color(0x6b5a39);fixture.material.emissiveIntensity=.35}
+ S.scene.add(new THREE.HemisphereLight(0xb9c7dd,0x332a24,1.55));
 }
+function door(x,z,rot=0,action="return"){let g=group("電梯",action),metal=M(0x6e7174,.35,.65);part(g,new THREE.BoxGeometry(1.8,3.8,.12),metal,-.92,1.72,0,0,rot);part(g,new THREE.BoxGeometry(1.8,3.8,.12),metal,.92,1.72,0,0,rot);part(g,new THREE.BoxGeometry(4,.18,.2),M(0x27292c),0,3.7,0,0,rot);g.position.set(x,0,z);interactive(g);return g}
+function panel(x,z){let g=group("樓層控制面板","panel"),metal=M(0x26292d,.3,.65);part(g,new THREE.BoxGeometry(.78,2.2,.16),metal,0,1.45,0);for(let i=0;i<6;i++){let y=.75+i*.27,b=part(g,new THREE.CylinderGeometry(.075,.075,.035,16),M(i===5?0xb44b42:0xd5c49c,.25,.55),0,y,.105,Math.PI/2);};g.position.set(x,0,z);interactive(g);return g}
+function table(x,z,burn=false){let g=group("燒焦餐桌","burn"),wood=M(burn?0x241a16:C.wood,.85);part(g,new THREE.BoxGeometry(2.6,.18,1.5),wood,0,.85,0);[[-1,.55,-.55],[1,.55,-.55],[-1,.55,.55],[1,.55,.55]].forEach(p=>part(g,new THREE.BoxGeometry(.16,1.1,.16),wood,...p));g.position.set(x,0,z);interactive(g);collider(x,z,2.8,1.7);return g}
+function chair(x,z,ry=0){let g=new THREE.Group(),m=M(0x4d3a31,.85);part(g,new THREE.BoxGeometry(.8,.12,.8),m,0,.65,0);part(g,new THREE.BoxGeometry(.8,1,.12),m,0,1.15,.34);[[-.3,.3,-.3],[.3,.3,-.3],[-.3,.3,.3],[.3,.3,.3]].forEach(p=>part(g,new THREE.BoxGeometry(.1,.65,.1),m,...p));g.position.set(x,0,z);g.rotation.y=ry;S.scene.add(g)}
+function register(x,z){let g=group("收銀機","register"),m=M(0x30343a,.4,.4);part(g,new THREE.BoxGeometry(1.5,.7,1),m,0,.65,0);part(g,new THREE.BoxGeometry(1.05,.62,.15),M(0x11161b,.25,.15),0,1.2,-.25,-.18);part(g,new THREE.PlaneGeometry(.78,.38),new THREE.MeshBasicMaterial({color:0x80a7a3}),0,1.22,-.335,-.18);for(let i=0;i<12;i++)part(g,new THREE.BoxGeometry(.11,.035,.11),M(0x8a8d90),-.38+(i%4)*.25,.99,-.25+Math.floor(i/4)*.17);g.position.set(x,0,z);interactive(g);collider(x,z,1.7,1.2);return g}
+function mannequin(x,z){let g=group("櫥窗人偶","doll"),skin=M(0xc4b7a8,.8),cloth=M(0x7a5960,.85);part(g,new THREE.SphereGeometry(.25,18,14),skin,0,2.25,0);part(g,new THREE.CylinderGeometry(.3,.42,1.05,14),cloth,0,1.55,0);part(g,new THREE.CylinderGeometry(.12,.1,.9,12),skin,-.48,1.55,0,0,0,-.12);part(g,new THREE.CylinderGeometry(.12,.1,.9,12),skin,.48,1.55,0,0,0,.12);part(g,new THREE.CylinderGeometry(.13,.11,1.05,12),M(0x3a3034),-.22,.65,0);part(g,new THREE.CylinderGeometry(.13,.11,1.05,12),M(0x3a3034),.22,.65,0);part(g,new THREE.CylinderGeometry(.55,.55,.08,18),M(0x17191c,.35,.45),0,.05,0);g.position.set(x,0,z);interactive(g);collider(x,z,1,1);return g}
+function toybox(x,z){let g=group("木製玩具箱","toybox"),w=M(0x79533e,.85);part(g,new THREE.BoxGeometry(2.3,.85,1.3),w,0,.45,0);part(g,new THREE.BoxGeometry(2.4,.18,1.4),M(0x624333,.8),0,.98,0,0,0,-.05);part(g,new THREE.BoxGeometry(.18,.32,.08),M(0x9b8255,.35,.6),0,.65,-.69);g.position.set(x,0,z);interactive(g);collider(x,z,2.5,1.5)}
+function mirror(x,z){let g=group("試衣鏡","mirror"),frame=M(0x40362f,.7),glass=M(0x9db5bd,.15,.45);part(g,new THREE.BoxGeometry(2.5,3.7,.12),frame,0,1.8,0);part(g,new THREE.PlaneGeometry(2.15,3.35),glass,0,1.8,-.07);g.position.set(x,0,z);interactive(g);collider(x,z,2.6,.5)}
+function fitting(x,z){let g=group("試衣間","fitting"),m=M(0x694e58,.9);part(g,new THREE.BoxGeometry(3.5,3.8,.18),m,0,1.8,0);part(g,new THREE.BoxGeometry(.18,3.8,2.3),m,-1.75,1.8,1);part(g,new THREE.BoxGeometry(.18,3.8,2.3),m,1.75,1.8,1);let curtain=M(0x573c48,1);for(let i=-7;i<=7;i++)part(g,new THREE.CylinderGeometry(.07,.07,3.4,8),curtain,i*.2,1.65,.18);g.position.set(x,0,z);interactive(g);collider(x,z,3.8,.8)}
+function booth(x,z){let g=group("警衛崗亭","guard"),m=M(0x485158,.6,.2);part(g,new THREE.BoxGeometry(4,.25,2.5),m,0,.1,0);part(g,new THREE.BoxGeometry(4,.18,2.5),m,0,2.9,0);[-1.9,1.9].forEach(px=>part(g,new THREE.BoxGeometry(.18,2.8,.18),m,px,1.5,-1.1));part(g,new THREE.BoxGeometry(4,1.05,.18),m,0,.65,-1.15);part(g,new THREE.PlaneGeometry(3.5,1.45),M(0x789099,.2,.2),0,1.8,-1.25);g.position.set(x,0,z);interactive(g);collider(x,z,4.3,2.8)}
+function locker(x,z){let g=group("金屬置物櫃","locker"),m=M(0x5d666c,.5,.5);for(let i=0;i<3;i++){part(g,new THREE.BoxGeometry(.85,3.2,.7),m,(i-1)*.9,1.55,0);for(let y=.8;y<2.5;y+=.25)part(g,new THREE.BoxGeometry(.35,.025,.03),M(0x262a2d), (i-1)*.9,y,-.365)}g.position.set(x,0,z);interactive(g);collider(x,z,3,.9)}
+function recorder(x,z){let g=group("錄音機","recorder"),m=M(0x31363b,.45,.45);part(g,new THREE.BoxGeometry(1.8,.7,1),m,0,.6,0);part(g,new THREE.CylinderGeometry(.28,.28,.04,18),M(0x181b1e),-.42,.82,-.52,Math.PI/2);part(g,new THREE.CylinderGeometry(.28,.28,.04,18),M(0x181b1e),.42,.82,-.52,Math.PI/2);part(g,new THREE.BoxGeometry(.65,.1,.04),M(0x8d7350),0,.45,-.53);g.position.set(x,0,z);interactive(g);collider(x,z,2,1.2)}
+function archive(x,z){let g=group("事故檔案櫃","archive"),m=M(0x4b5156,.55,.55);for(let i=0;i<4;i++){part(g,new THREE.BoxGeometry(3.2,.65,.9),m,0,.45+i*.7,0);part(g,new THREE.BoxGeometry(.45,.08,.05),M(0xb7a16e),0,.45+i*.7,-.47)}g.position.set(x,0,z);interactive(g);collider(x,z,3.5,1.1)}
 function objective(c,o){$("#chapter").textContent=c;$("#objective").textContent=o}
-function sign(text,x,y,z){let cv=document.createElement("canvas");cv.width=512;cv.height=128;let ctx=cv.getContext("2d");ctx.fillStyle="#11151b";ctx.fillRect(0,0,512,128);ctx.fillStyle="#f1d49a";ctx.font="bold 48px sans-serif";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,256,64);let tx=new THREE.CanvasTexture(cv),m=new THREE.Mesh(new THREE.PlaneGeometry(4,1),new THREE.MeshBasicMaterial({map:tx}));m.position.set(x,y,z);G.scene.add(m)}
-function room(r){
- G.room=r;clear();G.camera.position.set(0,1.7,Math.min(4,G.bounds.z||4));G.yaw=0;G.pitch=0;
- if(r==="elevator"){shell(8,8,0x45484d);box("樓層按鈕",2.65,1.6,-3.25,1.15,3,.3,0x1b2027,"panel",0x5b4720);box("電梯門",0,1.5,-3.72,3.7,5,.18,0x6a6d72,"door");sign("00:47",-0.8,4.35,-3.55);objective("序章","調查右側發亮的樓層按鈕")}
- if(r==="six"){shell(22,28,0x343039);box("櫥窗人偶",3,1.1,-6.5,.9,2.2,.8,0xb9838e,"doll",0x3b151d);box("玩具箱",-4.8,.25,-7.5,3,1.3,2,0x8a6048,"toybox",0x2d1408);box("電梯",0,1.5,13.7,4,5,.25,0x62666c,"return");sign("6F 兒童生活",0,4.5,-13.5);objective("第一章 · 6F","先調查櫥窗人偶")}
- if(r==="four"){shell(26,30,0x3b352f);box("收銀機",7,1,-8.5,2,2,1.3,0x59616a,"register",0x17212c);box("燒焦餐桌",-6,.45,-8,3,.35,2.2,0x493126,"burn",0x241008);box("電梯",0,1.5,14.7,4,5,.25,0x62666c,"return");sign("4F 美食街",0,4.5,-14.5);objective("第二章 · 4F","調查燒焦餐桌")}
- if(r==="two"){shell(24,28,0x39373f);box("試衣鏡",6.5,1.6,-8,.3,4.4,4.2,0xa8c7d2,"mirror",0x18323c);box("試衣間",-6.5,1.6,-9,4,5,.3,0x6a4e5a,"fitting",0x24131c);box("電梯",0,1.5,13.7,4,5,.25,0x62666c,"return");sign("2F 女裝",0,4.5,-13.5);objective("第三章 · 2F","調查異常的試衣鏡")}
- if(r==="b1"){shell(22,26,0x30363b);box("警衛崗亭",5,1,-6.5,5,3,3,0x515b61,"guard",0x15252c);box("置物櫃",-5.5,1,-7.5,3,4,1,0x596168,"locker",0x16232b);box("電梯",0,1.5,12.7,4,5,.25,0x62666c,"return");sign("B1 停車場",0,4.5,-12.5);objective("第四章 · B1","先去警衛崗亭")}
- if(r==="b3"){shell(20,30,0x292d31);box("錄音機",-4.5,.8,-7,2,1.5,1.5,0x59616b,"recorder",0x17232d);box("事故檔案",0,1,-12,5,3,1,0x62535a,"archive",0x25151b);box("電梯",0,1.5,14.7,4,5,.25,0x62666c,"return");sign("B3 CONTROL",0,4.5,-14.5);objective("第五章 · B3","播放 00:47 錄音")}
+function room(r){S.room=r;clear();
+ if(r==="elevator"){shell(8,8,0x46484c);door(0,-3.72);panel(2.7,-3.35);S.cam.position.set(0,1.65,2.3);objective("序章","調查右側樓層面板")}
+ if(r==="six"){shell(22,28,0x4d4650);door(0,13.72);mannequin(3,-6);toybox(-4.5,-7.5);chair(-2,-2,.3);chair(4,-1,-.5);S.cam.position.set(0,1.65,10.5);objective("第一章 · 6F","調查櫥窗人偶")}
+ if(r==="four"){shell(26,30,0x514a43);door(0,14.72);table(-5.5,-7.5,true);chair(-6.8,-6.1,.4);chair(-4.2,-6,-.4);register(6.5,-8);cube(6.5,.4,-6.5,4,.8,1.2,0x4c3a30);collider(6.5,-6.5,4.2,1.4);S.cam.position.set(0,1.65,11.5);objective("第二章 · 4F","調查燒焦餐桌")}
+ if(r==="two"){shell(24,28,0x49474e);door(0,13.72);mirror(6,-8);fitting(-6,-9);S.cam.position.set(0,1.65,10.5);objective("第三章 · 2F","調查試衣鏡")}
+ if(r==="b1"){shell(22,26,0x3d454b);door(0,12.72);booth(4.5,-6);locker(-5,-7);S.cam.position.set(0,1.65,9.5);objective("第四章 · B1","前往警衛崗亭")}
+ if(r==="b3"){shell(20,30,0x34383c);door(0,14.72);recorder(-4,-7);archive(0,-12);S.cam.position.set(0,1.65,11.5);objective("第五章 · B3","播放 00:47 錄音")}
+ S.yaw=0;S.pitch=0;S.vel.set(0,0)
 }
-function menu(){let c=[["6F 兒童生活",()=>go("six")],["4F 美食街",()=>go("four")],["2F 女裝",()=>go("two")],["B1 停車場",()=>go("b1")]];if(G.flags.cassette)c.push(["B3 未登錄樓層",()=>go("b3")]);dialog("電梯樓層","幾個樓層按鈕仍亮著。",c)}
-function go(r){$("#dialog").style.display="none";beep(180,.22);setTimeout(()=>room(r),160)}
+function dialog(t,b,choices=[]){S.input.set(0,0);$("#dt").textContent=t;$("#db").innerHTML=b;$("#choices").innerHTML="";choices.forEach(([n,f])=>{let b=document.createElement("button");b.className="choice";b.textContent=n;b.onclick=f;$("#choices").appendChild(b)});$("#dialog").style.display="flex"}
+$("#close").onclick=()=>$("#dialog").style.display="none";
+function beep(f=430,d=.07){if(!S.sound)return;if(!S.audio){S.audio=new(window.AudioContext||window.webkitAudioContext)();let o=S.audio.createOscillator(),g=S.audio.createGain();o.frequency.value=45;g.gain.value=.01;o.connect(g).connect(S.audio.destination);o.start();S.hum=g}S.audio.resume?.();let o=S.audio.createOscillator(),g=S.audio.createGain();o.frequency.value=f;g.gain.value=.02;o.connect(g).connect(S.audio.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,S.audio.currentTime+d);o.stop(S.audio.currentTime+d)}
+function menu(){let c=[["6F 兒童生活",()=>go("six")],["4F 美食街",()=>go("four")],["2F 女裝",()=>go("two")],["B1 停車場",()=>go("b1")]];if(S.flags.tape)c.push(["B3 未登錄樓層",()=>go("b3")]);dialog("樓層面板","幾個按鈕仍亮著。",c)}
+function go(r){$("#dialog").style.display="none";beep(160,.2);setTimeout(()=>room(r),140)}
 function act(a){
- if(a==="panel")return menu();
- if(a==="door")return dialog("電梯門","門外沒有出口。真正有反應的是右側樓層按鈕。");
- if(a==="return")return room("elevator");
- if(a==="doll"){if(!G.flags.doll){G.flags.doll=true;item("key");objective("第一章 · 6F","用小鑰匙調查玩具箱");dialog("櫥窗人偶","人偶鞋底寫著：<div class='note'>不要看樓層，要聽抵達音。</div>它手裡藏著一把小鑰匙。")}else dialog("櫥窗人偶","它的頭似乎比剛才更偏向妳。");return}
- if(a==="toybox"){if(!G.items.has("key"))return dialog("玩具箱","箱子上鎖了。需要一把小鑰匙。");G.flags.toy=true;dialog("玩具箱","鑰匙打開了夾層。裡面是一張三年前的員工合照。<div class='note'>背面：事故時間 00:47</div>");return}
- if(a==="burn"){if(!G.flags.receipt){G.flags.receipt=true;item("receipt");objective("第二章 · 4F","拿燒焦收據去查收銀機");dialog("燒焦餐桌","桌腳下壓著一張收據。<div class='note'>23:58 員工餐 ×3<br>00:41 緊急廣播<br>00:47 VOID</div>")}else dialog("燒焦餐桌","只剩三個焦黑杯印。");return}
- if(a==="register"){if(!G.items.has("receipt"))return dialog("收銀機","螢幕顯示：需要最後一筆交易資料。");G.flags.register=true;dialog("收銀機","掃描收據後跳出備註：<div class='note'>第三份餐給小晴。她要去 B3 關總電源。</div>");return}
- if(a==="mirror"){if(!G.flags.mirror){G.flags.mirror=true;item("lens");objective("第三章 · 2F","拿鏡片去調查試衣間");dialog("試衣鏡","鏡中的妳慢了半秒。身後站著一名穿制服的女孩。鏡角掉下一片鏡片。")}else dialog("試衣鏡","鏡中的走道比現實多出一道門。");return}
- if(a==="fitting"){if(!G.items.has("lens"))return dialog("試衣間","牆上有反字，但肉眼看不清楚。");G.flags.fitting=true;dialog("試衣間","透過鏡片，反字變得清楚：<div class='note'>不是警衛把門鎖上。是我。——妳</div>");return}
- if(a==="guard"){if(!G.flags.guard){G.flags.guard=true;item("badge");objective("第四章 · B1","用警衛證調查置物櫃");dialog("夜班警衛","「三年前火警那晚，小晴被困在 B3。妳關了防火門。」<br><br>他把警衛證交給妳。")}else dialog("夜班警衛","「去置物櫃拿那捲錄音帶。然後去 B3。」");return}
- if(a==="locker"){if(!G.items.has("badge"))return dialog("置物櫃","電子鎖需要警衛證。");if(!G.flags.cassette){G.flags.cassette=true;item("cassette");objective("第四章 · B1","B3 已出現在電梯選單");}dialog("置物櫃","找到標記 <strong>00:47 / CONTROL ROOM</strong> 的錄音帶。<div class='note'>B3 的按鈕現在亮了。</div>");return}
- if(a==="recorder"){if(!G.items.has("cassette"))return dialog("錄音機","卡槽是空的。");G.flags.recording=true;objective("第五章 · B3","調查事故檔案");dialog("00:47 錄音","小晴：「煙進來了！開門！」<br>警衛：「防火門卡住了！」<div class='note'>妳：「不要開。火會燒到整棟樓。」</div>");return}
- if(a==="archive"){if(!G.flags.recording)return dialog("事故檔案","檔案被鎖定。先播放 00:47 的錄音。");dialog("事故檔案：真相","三年前 B3 起火。為阻止火勢蔓延，妳在 00:47 手動鎖死防火門，小晴沒能逃出來。這座百貨公司，是妳反覆重演的記憶。",[["記住全部",()=>end("TRUE END · 00:48","時鐘終於從 00:47 跳到 00:48。妳沒有改變過去，但停止逃避它。")],["再次離開",()=>end("LOOP END · 00:47","電梯門關上。手機裡再次出現那段來自明天的影片。")]]);return}
+ if(a==="panel")return menu(); if(a==="return")return room("elevator");
+ if(a==="doll"){if(!S.flags.doll){S.flags.doll=1;S.items.add("key");objective("第一章 · 6F","用小鑰匙打開木製玩具箱");dialog("櫥窗人偶","人偶的手指間夾著一把小鑰匙。<div class='note'>鞋底：不要看樓層，要聽抵達音。</div>")}else dialog("櫥窗人偶","它的臉似乎比剛才更朝向妳。");return}
+ if(a==="toybox"){if(!S.items.has("key"))return dialog("木製玩具箱","鎖住了。");dialog("玩具箱","夾層裡是一張三年前的員工合照。<div class='note'>事故時間：00:47</div>");return}
+ if(a==="burn"){if(!S.flags.receipt){S.flags.receipt=1;S.items.add("receipt");objective("第二章 · 4F","拿收據去查收銀機");dialog("燒焦餐桌","焦黑桌腳下壓著一張收據。<div class='note'>23:58 員工餐 ×3<br>00:47 VOID</div>")}else dialog("燒焦餐桌","三個焦黑杯印。");return}
+ if(a==="register"){if(!S.items.has("receipt"))return dialog("收銀機","需要最後一筆交易資料。");dialog("收銀機","備註：<div class='note'>第三份餐給小晴。她要去 B3 關總電源。</div>");return}
+ if(a==="mirror"){if(!S.flags.mirror){S.flags.mirror=1;S.items.add("lens");objective("第三章 · 2F","拿鏡片去試衣間");dialog("試衣鏡","鏡中的妳慢了半秒。鏡框掉下一片鏡片。")}else dialog("試衣鏡","鏡裡的走道比現實多一道門。");return}
+ if(a==="fitting"){if(!S.items.has("lens"))return dialog("試衣間","牆上的反字看不清楚。");dialog("試衣間","透過鏡片：<div class='note'>不是警衛把門鎖上。是我。——妳</div>");return}
+ if(a==="guard"){if(!S.flags.guard){S.flags.guard=1;S.items.add("badge");objective("第四章 · B1","用警衛證打開置物櫃");dialog("夜班警衛","「三年前火警那晚，小晴被困在 B3。妳關了防火門。」<br><br>他把警衛證放到桌上。")}else dialog("夜班警衛","「去拿錄音帶。這次別再逃。」");return}
+ if(a==="locker"){if(!S.items.has("badge"))return dialog("置物櫃","需要警衛證。");S.flags.tape=1;S.items.add("tape");objective("第四章 · B1","B3 已出現在電梯選單");dialog("置物櫃","找到標記 <b>00:47 / CONTROL ROOM</b> 的錄音帶。");return}
+ if(a==="recorder"){if(!S.items.has("tape"))return dialog("錄音機","卡槽是空的。");S.flags.record=1;objective("第五章 · B3","調查事故檔案櫃");dialog("00:47 錄音","小晴：「煙進來了！開門！」<br>警衛：「防火門卡住了！」<div class='note'>妳：「不要開。火會燒到整棟樓。」</div>");return}
+ if(a==="archive"){if(!S.flags.record)return dialog("事故檔案","先播放錄音。");dialog("事故真相","三年前 B3 起火。妳在 00:47 手動鎖死防火門以阻止火勢蔓延，小晴沒有逃出來。",[["記住全部",()=>ending("TRUE END · 00:48","時鐘終於跳到 00:48。妳無法改變過去，但停止逃避。")],["再次離開",()=>ending("LOOP END · 00:47","電梯門關上。那段來自明天的影片再次出現。")]]);return}
 }
-function end(t,b){$("#dialog").style.display="none";$("#et").textContent=t;$("#eb").innerHTML=b;$("#ending").style.display="flex"}
-function hit(){G.ray.setFromCamera(new THREE.Vector2(),G.camera);let h=G.ray.intersectObjects(G.objects,false);return h.length&&h[0].distance<8?h[0]:null}
-function interact(){let h=hit();if(h)act(h.object.userData.action);else say("準星對準可調查物件再試一次")}
+function ending(t,b){$("#dialog").style.display="none";$("#et").textContent=t;$("#eb").textContent=b;$("#ending").style.display="flex"}
+function rayhit(){S.ray.setFromCamera(new THREE.Vector2(0,0),S.cam);let hits=S.ray.intersectObjects(S.scene.children,true);for(let h of hits){let r=h.object.userData.root;if(r&&r.userData.action&&h.distance<5.5)return r}return null}
+function blocked(x,z){let rad=.34;if(x<-S.bounds.x||x>S.bounds.x||z<-S.bounds.z||z>S.bounds.z)return true;for(let c of S.colliders)if(Math.abs(x-c.x)<c.w/2+rad&&Math.abs(z-c.z)<c.d/2+rad)return true;return false}
+function interact(){let r=rayhit();if(r)act(r.userData.action)}
 function init(){
- G.scene=new THREE.Scene();G.scene.background=new THREE.Color(0x11151b);G.scene.fog=new THREE.FogExp2(0x11151b,.018);
- G.camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,100);
- G.renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});G.renderer.outputColorSpace=THREE.SRGBColorSpace;G.renderer.toneMapping=THREE.ACESFilmicToneMapping;G.renderer.toneMappingExposure=1.45;G.renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));G.renderer.setSize(innerWidth,innerHeight);$("#game").appendChild(G.renderer.domElement);
- G.ray=new THREE.Raycaster();G.clock=new THREE.Clock();room("elevator");
- let c=G.renderer.domElement;
- c.onpointerdown=e=>{if(e.clientX>innerWidth*.32){G.drag=true;G.lastX=e.clientX;G.lastY=e.clientY;c.setPointerCapture?.(e.pointerId)}};
- c.onpointermove=e=>{if(G.drag){G.yaw-=(e.clientX-G.lastX)*.004;G.pitch=Math.max(-1.05,Math.min(1.05,G.pitch-(e.clientY-G.lastY)*.0035));G.lastX=e.clientX;G.lastY=e.clientY}};
- c.onpointerup=c.onpointercancel=()=>G.drag=false;
- let joy=$("#joystick"),stick=$("#stick"),jid=null;
- function jm(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,m=Math.hypot(x,y)||1,s=Math.min(32,m)/m,nx=x*s,ny=y*s;stick.style.transform=`translate(${nx}px,${ny}px)`;G.moveX=nx/32;G.moveY=-ny/32}
- joy.onpointerdown=e=>{jid=e.pointerId;joy.setPointerCapture(jid);jm(e)};joy.onpointermove=e=>{if(e.pointerId===jid)jm(e)};joy.onpointerup=joy.onpointercancel=()=>{jid=null;G.moveX=G.moveY=0;stick.style.transform=""};
- addEventListener("resize",()=>{G.camera.aspect=innerWidth/innerHeight;G.camera.updateProjectionMatrix();G.renderer.setSize(innerWidth,innerHeight)});
- function loop(){requestAnimationFrame(loop);let dt=Math.min(.04,G.clock.getDelta()),f=G.moveY,s=G.moveX,nx=G.camera.position.x+(Math.sin(G.yaw)*f+Math.cos(G.yaw)*s)*3.2*dt,nz=G.camera.position.z+(-Math.cos(G.yaw)*f+Math.sin(G.yaw)*s)*3.2*dt;G.camera.position.x=Math.max(-G.bounds.x,Math.min(G.bounds.x,nx));G.camera.position.z=Math.max(-G.bounds.z,Math.min(G.bounds.z,nz));G.camera.rotation.order="YXZ";G.camera.rotation.y=G.yaw;G.camera.rotation.x=G.pitch;let h=hit();$("#cross").classList.toggle("target",!!h);$("#prompt").classList.toggle("on",!!h);if(h)$("#prompt").textContent="調查 · "+h.object.name;G.renderer.render(G.scene,G.camera)}loop()
+ S.scene=new THREE.Scene();S.scene.background=new THREE.Color(0x0e1115);S.scene.fog=new THREE.FogExp2(0x0e1115,.017);
+ S.cam=new THREE.PerspectiveCamera(68,innerWidth/innerHeight,.08,100);
+ S.ren=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});S.ren.setPixelRatio(Math.min(devicePixelRatio,1.5));S.ren.setSize(innerWidth,innerHeight);S.ren.outputColorSpace=THREE.SRGBColorSpace;S.ren.toneMapping=THREE.ACESFilmicToneMapping;S.ren.toneMappingExposure=1.35;$("#game").appendChild(S.ren.domElement);
+ S.ray=new THREE.Raycaster();S.clock=new THREE.Clock();room("elevator");
+ let cv=S.ren.domElement;
+ cv.onpointerdown=e=>{if(e.clientX>innerWidth*.35){S.drag=true;S.lastX=e.clientX;S.lastY=e.clientY;cv.setPointerCapture?.(e.pointerId)}};
+ cv.onpointermove=e=>{if(S.drag){S.yaw-=(e.clientX-S.lastX)*.0032;S.pitch=Math.max(-.9,Math.min(.9,S.pitch-(e.clientY-S.lastY)*.0028));S.lastX=e.clientX;S.lastY=e.clientY}};
+ cv.onpointerup=cv.onpointercancel=()=>S.drag=false;
+ let joy=$("#joy"),stick=$("#stick"),pid=null;
+ function jm(e){let r=joy.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,m=Math.hypot(x,y)||1,k=Math.min(33,m)/m,nx=x*k,ny=y*k;stick.style.transform=`translate(${nx}px,${ny}px)`;S.input.set(nx/33,-ny/33)}
+ joy.onpointerdown=e=>{pid=e.pointerId;joy.setPointerCapture(pid);jm(e)};joy.onpointermove=e=>{if(e.pointerId===pid)jm(e)};joy.onpointerup=joy.onpointercancel=()=>{pid=null;S.input.set(0,0);stick.style.transform=""};
+ addEventListener("resize",()=>{S.cam.aspect=innerWidth/innerHeight;S.cam.updateProjectionMatrix();S.ren.setSize(innerWidth,innerHeight)});
+ function loop(){requestAnimationFrame(loop);let dt=Math.min(.035,S.clock.getDelta());
+   let dialogOpen=$("#dialog").style.display==="flex"||$("#ending").style.display==="flex";
+   let tx=dialogOpen?0:S.input.x,ty=dialogOpen?0:S.input.y;
+   let smooth=1-Math.exp(-10*dt);S.vel.x+=(tx-S.vel.x)*smooth;S.vel.y+=(ty-S.vel.y)*smooth;
+   let speed=3.1,fx=Math.sin(S.yaw),fz=-Math.cos(S.yaw),rx=Math.cos(S.yaw),rz=Math.sin(S.yaw);
+   let dx=(fx*S.vel.y+rx*S.vel.x)*speed*dt,dz=(fz*S.vel.y+rz*S.vel.x)*speed*dt;
+   let nx=S.cam.position.x+dx,nz=S.cam.position.z;if(!blocked(nx,nz))S.cam.position.x=nx;
+   nx=S.cam.position.x;nz=S.cam.position.z+dz;if(!blocked(nx,nz))S.cam.position.z=nz;
+   S.cam.rotation.order="YXZ";S.cam.rotation.y=S.yaw;S.cam.rotation.x=S.pitch;
+   let r=rayhit();$("#cross").classList.toggle("hot",!!r);$("#prompt").classList.toggle("on",!!r);if(r)$("#prompt").textContent="調查 · "+r.name;
+   S.ren.render(S.scene,S.cam)
+ }loop()
 }
-$("#start").onclick=()=>{if(typeof THREE==="undefined")return alert("3D 引擎載入失敗，請重新整理頁面。");audio();$("#overlay").style.display="none";init()};
-$("#interact").onclick=interact;
-$("#hint").onclick=()=>dialog("提示",{elevator:"右側有一塊發亮的樓層按鈕面板。",six:G.items.has("key")?"小鑰匙可以打開玩具箱。":"先找櫥窗人偶。",four:G.items.has("receipt")?"拿收據去調查收銀機。":"先看燒焦餐桌。",two:G.items.has("lens")?"鏡片能讀出試衣間的反字。":"先調查鏡子。",b1:G.items.has("badge")?"警衛證可以開置物櫃。":"先找警衛談話。",b3:G.flags.recording?"現在去看事故檔案。":"把錄音帶放進錄音機。"}[G.room]);
-$("#sound").onclick=()=>{G.sound=!G.sound;$("#sound").textContent=G.sound?"🔊":"🔇";if(G.hum)G.hum.gain.value=G.sound?.012:0};
+$("#start").onclick=()=>{if(typeof THREE==="undefined")return alert("3D 引擎載入失敗，請重新整理。");$("#overlay").style.display="none";init();beep(220,.08)};
+$("#act").onclick=interact;
+$("#hint").onclick=()=>dialog("提示",{elevator:"右側是樓層控制面板。",six:S.items.has("key")?"小鑰匙能打開木製玩具箱。":"先找櫥窗人偶。",four:S.items.has("receipt")?"拿收據去收銀機。":"先找燒焦餐桌。",two:S.items.has("lens")?"用鏡片調查試衣間。":"先看試衣鏡。",b1:S.items.has("badge")?"警衛證能開置物櫃。":"先到警衛崗亭。",b3:S.flags.record?"去事故檔案櫃。":"先播放錄音帶。"}[S.room]);
+$("#sound").onclick=()=>{S.sound=!S.sound;$("#sound").textContent=S.sound?"🔊":"🔇";if(S.hum)S.hum.gain.value=S.sound?.01:0};
 $("#full").onclick=()=>document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.();
-$("#restart").onclick=()=>location.reload();
 })();
 </script>
 </body>
